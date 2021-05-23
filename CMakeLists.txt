@@ -3,15 +3,14 @@
 #
 cmake_minimum_required (VERSION 3.10)
 
+project ("Clarke")
+
 # Tests
 enable_testing()
-find_package(GTest REQUIRED)
-include_directories(${GTEST_INCLUDE_DIRS})
 
 # Language Standard
 set(CMAKE_CXX_STANDARD 20)
 
-project ("Clarke")
 
 # Include sub-projects.
 add_subdirectory ("Clarke.Messages")
