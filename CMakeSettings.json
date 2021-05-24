@@ -10,13 +10,7 @@
       "cmakeCommandArgs": "",
       "buildCommandArgs": "-v",
       "ctestCommandArgs": "",
-      "intelliSenseMode": "linux-gcc-x64",
-      "variables": [
-        {
-          "name": "CMAKE_TOOLCHAIN_FILE",
-          "value": "D:\\VS\\vcpkg\\scripts\\buildsystems\\vcpkg.cmake"
-        }
-      ]
+      "intelliSenseMode": "linux-gcc-x64"
     }
   ]
 }
