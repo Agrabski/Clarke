@@ -16,3 +16,9 @@ set(CMAKE_CXX_STANDARD 20)
 add_subdirectory ("Clarke.Messages")
 
 add_subdirectory("Clarke.Messages.Tests")
+
+add_subdirectory("Clarke.Engine.Core")
+
+add_subdirectory("Clarke.Engine.Entropy")
+
+add_subdirectory("Clarke.Engine.Core.Tests")

@@ -3,78 +3,87 @@
 #include <sstream>
 #include "../Clarke.Messages/MessageOperator.hpp"
 #include "../Clarke.Messages/Message.hpp"
+#include "../Clarke.Messages/TypeNameTrait.hpp"
+#include "../Clarke.Messages/TypeProperties.hpp"
 
 using namespace clarke::messages;
+namespace test {
+	struct testMessage : Message<int, int>
+	{
 
-struct testMessage : Message<int, int>
-{
-	
-	CONSTRUCTORS(testMessage);
-	PROPERTY(x, 0);
-	PROPERTY(y, 1);
-};
+		MESSAGE_CONSTRUCTORS(testMessage);
+		PROPERTY(x, 0);
+		PROPERTY(y, 1);
+	};
 
-struct testMessage2 : Message<testMessage, int, int>
-{
-	
-	CONSTRUCTORS(testMessage2);
+	struct testMessage2 : Message<testMessage, int, int>
+	{
 
-	PROPERTY(a, 0);
-	PROPERTY(b, 1);
-	PROPERTY(c, 2);
-};
+		MESSAGE_CONSTRUCTORS(testMessage2);
 
-REGISTER_MESSAGE(testMessage);
-REGISTER_MESSAGE(testMessage2);
+		PROPERTY(a, 0);
+		PROPERTY(b, 1);
+		PROPERTY(c, 2);
+	};
+}
+REGISTER_NAME(test::testMessage);
+REGISTER_NAME(test::testMessage2);
 
+using namespace test;
 
 TEST(Serialization, serialize_simple_message) {
 	std::stringstream ss;
 	print(ss, testMessage());
-	EXPECT_EQ(ss.str(), "(testMessage 0 0)");
+	EXPECT_EQ(ss.str(), "(test::testMessage 0 0)");
 }
 
 TEST(Serialization, serialize_simple_message_non_default_values) {
 	std::stringstream ss;
-	print(ss, testMessage{1, 12});
-	EXPECT_EQ(ss.str(), "(testMessage 1 12)");
+	print(ss, testMessage{ 1, 12 });
+	EXPECT_EQ(ss.str(), "(test::testMessage 1 12)");
 }
 
 TEST(Serialization, serialize_compound_message) {
 	std::stringstream ss;
 	print(ss, testMessage2());
-	EXPECT_EQ(ss.str(), "(testMessage2 (testMessage 0 0) 0 0)");
+	EXPECT_EQ(ss.str(), "(test::testMessage2 (test::testMessage 0 0) 0 0)");
 }
 
 TEST(Serialization, serialize_compound_message_non_default_values) {
 	std::stringstream ss;
 	print(ss, testMessage2{ testMessage{ 1, 12 }, 3, 4 });
-	EXPECT_EQ(ss.str(), "(testMessage2 (testMessage 1 12) 3 4)");
+	EXPECT_EQ(ss.str(), "(test::testMessage2 (test::testMessage 1 12) 3 4)");
 }
 
 TEST(Deserialization, deserialize_simple_message) {
-	std::stringstream ss;
-	print(ss, testMessage());
-	EXPECT_EQ(ss.str(), "(testMessage 0 0)");
-	FAIL() << "TODO";
+	std::stringstream ss{ "(test::testMessage 0 0)" };
+	testMessage tm;
+	read(ss, tm);
+	auto expected = testMessage{};
+	EXPECT_EQ(tm, expected);
+	EXPECT_FALSE(ss.fail());
 }
 
 TEST(Deserialization, deserialize_simple_message_non_default_values) {
-	std::stringstream ss;
-	print(ss, testMessage{ 1, 12 });
-	EXPECT_EQ(ss.str(), "(testMessage 1 12)");
-	FAIL() << "TODO";
+	std::stringstream ss{ "(test::testMessage 23 44)" };
+	testMessage tm;
+	read(ss, tm);
+	auto expected = testMessage{23, 44};
+	EXPECT_EQ(tm, expected);
+	EXPECT_FALSE(ss.fail());
 }
 
 TEST(Deserialization, deserialize_compound_message) {
-	std::stringstream ss;
-	print(ss, testMessage2());
-	EXPECT_EQ(ss.str(), "(testMessage2 (testMessage 0 0) 0 0)");
-	FAIL() << "TODO";
+	std::stringstream ss{ "(test::testMessage2 (test::testMessage 0 0) 0 0)" };
+	testMessage2 tm;
+	read(ss, tm);
+	auto expected = testMessage2{ };
+	EXPECT_EQ(tm, expected);
+	EXPECT_FALSE(ss.fail());
 }
 
 TEST(Deserialization, deserialize_compound_message_non_default_values) {
-	std::stringstream ss{ "(testMessage2 (testMessage 1 12) 3 4)" };
+	std::stringstream ss{ "(test::testMessage2 (test::testMessage 1 12) 3 4)" };
 	testMessage2 tm;
 	read(ss, tm);
 	auto expected = testMessage2{ testMessage{ 1, 12 }, 3, 4 };
@@ -91,7 +100,7 @@ TEST(Property, simple_message_has_getter) {
 }
 
 TEST(Property, simple_message_has_getter_non_default_constructor) {
-	const testMessage tm{3, 4};
+	const testMessage tm{ 3, 4 };
 	EXPECT_EQ(tm.x(), 3);
 	EXPECT_EQ(tm.y(), 4);
 }

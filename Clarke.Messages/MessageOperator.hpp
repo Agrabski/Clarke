@@ -87,11 +87,4 @@ namespace clarke::messages
 		return read<0>(s >> (const char[])"(" >> type_name_trait<T>::name, object) >> (const char[])")";
 	}
 
-
-		/// registers a message. MUST BE USED IN GLOBAL NAMESPACE
-#define REGISTER_MESSAGE(X) namespace clarke::messages{ template<> struct type_name_trait<X> {static inline const char name[] = #X;};}
-
-#define PROPERTY(NAME, INDEX) auto const& NAME() const noexcept {return std::get<INDEX>(*this);}
-#define CONSTRUCTORS(X) using Message::Message;\
-~X() noexcept = default;
 }
