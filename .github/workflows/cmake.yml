@@ -24,15 +24,9 @@ jobs:
       uses: lukka/run-vcpkg@v6
       with:
         # Just install vcpkg for now, do not install any ports in this step yet.
-        setupOnly: true
+        setupOnly: false
         # Location of the vcpkg submodule in the Git repository.
         vcpkgDirectory: '${{ github.workspace }}/vcpkg'
-        # Since the cache must be invalidated when content of the vcpkg.json file changes, let's
-        # compute its hash and append this to the computed cache's key.
-        appendedCacheKey: ${{ hashFiles( '**/vcpkg_manifest/vcpkg.json' ) }}
-        vcpkgTriplet: ${{ matrix.triplet }}
-        # Ensure the vcpkg artifacts are cached, they are generated in the 'CMAKE_BINARY_DIR/vcpkg_installed' directory.
-        additionalCachedPaths: ${{ env.buildDir }}/vcpkg_installed
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
