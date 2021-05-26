@@ -10,19 +10,19 @@ TEST(Serialization, WorldPosition)
 {
 	std::stringstream ss;
 	print(ss, WorldPosition());
-	EXPECT_EQ(ss.str(), "(clarke::engine::core::WorldPosition 0 0)");
+	EXPECT_EQ(ss.str(), "(WorldPosition 0 0)");
 }
 
 TEST(Serialization, WorldPosition_non_default_values)
 {
 	std::stringstream ss;
 	print(ss, WorldPosition(12, 15));
-	EXPECT_EQ(ss.str(), "(clarke::engine::core::WorldPosition 12 15)");
+	EXPECT_EQ(ss.str(), "(WorldPosition 12 15)");
 }
 
 TEST(Desrialization, WorldPosition)
 {
-	std::stringstream ss("(clarke::engine::core::WorldPosition 0 0)");
+	std::stringstream ss("(WorldPosition 0 0)");
 	WorldPosition wp;
 	EXPECT_FALSE(read(ss, wp).fail());
 	EXPECT_EQ(wp.x(), 0);
@@ -31,7 +31,7 @@ TEST(Desrialization, WorldPosition)
 
 TEST(Deserialization, WorldPosition_non_default_values)
 {
-	std::stringstream ss("(clarke::engine::core::WorldPosition 12 15)");
+	std::stringstream ss("(WorldPosition 12 15)");
 	WorldPosition wp;
 	EXPECT_FALSE(read(ss, wp).fail());
 	EXPECT_EQ(wp.x(), 12);

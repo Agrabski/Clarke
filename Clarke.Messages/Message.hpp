@@ -1,5 +1,6 @@
 #pragma once
 #include <tuple>
+#include <type_traits>
 
 namespace clarke::messages
 {
@@ -14,7 +15,10 @@ namespace clarke::messages
 	protected:
 		virtual ~Message() noexcept = default;
 	public:
-		Message(Ts const&... args) noexcept : std::tuple<Ts...>(args...) {}
-		Message() noexcept = default;
+		constexpr Message(Ts const&... args) noexcept : std::tuple<Ts...>(args...) {}
+		constexpr Message() noexcept = default;
 	};
+
+	template<typename T>
+	concept message = std::is_base_of<IMessage, T>::value;
 }

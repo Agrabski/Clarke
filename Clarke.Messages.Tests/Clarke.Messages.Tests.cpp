@@ -26,37 +26,37 @@ namespace test {
 		PROPERTY(c, 2);
 	};
 }
-REGISTER_NAME(test::testMessage);
-REGISTER_NAME(test::testMessage2);
+REGISTER_NAME(test, testMessage);
+REGISTER_NAME(test, testMessage2);
 
 using namespace test;
 
 TEST(Serialization, serialize_simple_message) {
 	std::stringstream ss;
 	print(ss, testMessage());
-	EXPECT_EQ(ss.str(), "(test::testMessage 0 0)");
+	EXPECT_EQ(ss.str(), "(testMessage 0 0)");
 }
 
 TEST(Serialization, serialize_simple_message_non_default_values) {
 	std::stringstream ss;
 	print(ss, testMessage{ 1, 12 });
-	EXPECT_EQ(ss.str(), "(test::testMessage 1 12)");
+	EXPECT_EQ(ss.str(), "(testMessage 1 12)");
 }
 
 TEST(Serialization, serialize_compound_message) {
 	std::stringstream ss;
 	print(ss, testMessage2());
-	EXPECT_EQ(ss.str(), "(test::testMessage2 (test::testMessage 0 0) 0 0)");
+	EXPECT_EQ(ss.str(), "(testMessage2 (testMessage 0 0) 0 0)");
 }
 
 TEST(Serialization, serialize_compound_message_non_default_values) {
 	std::stringstream ss;
 	print(ss, testMessage2{ testMessage{ 1, 12 }, 3, 4 });
-	EXPECT_EQ(ss.str(), "(test::testMessage2 (test::testMessage 1 12) 3 4)");
+	EXPECT_EQ(ss.str(), "(testMessage2 (testMessage 1 12) 3 4)");
 }
 
 TEST(Deserialization, deserialize_simple_message) {
-	std::stringstream ss{ "(test::testMessage 0 0)" };
+	std::stringstream ss{ "(testMessage 0 0)" };
 	testMessage tm;
 	read(ss, tm);
 	auto expected = testMessage{};
@@ -65,7 +65,7 @@ TEST(Deserialization, deserialize_simple_message) {
 }
 
 TEST(Deserialization, deserialize_simple_message_non_default_values) {
-	std::stringstream ss{ "(test::testMessage 23 44)" };
+	std::stringstream ss{ "(testMessage 23 44)" };
 	testMessage tm;
 	read(ss, tm);
 	auto expected = testMessage{23, 44};
@@ -74,7 +74,7 @@ TEST(Deserialization, deserialize_simple_message_non_default_values) {
 }
 
 TEST(Deserialization, deserialize_compound_message) {
-	std::stringstream ss{ "(test::testMessage2 (test::testMessage 0 0) 0 0)" };
+	std::stringstream ss{ "(testMessage2 (testMessage 0 0) 0 0)" };
 	testMessage2 tm;
 	read(ss, tm);
 	auto expected = testMessage2{ };
@@ -83,7 +83,7 @@ TEST(Deserialization, deserialize_compound_message) {
 }
 
 TEST(Deserialization, deserialize_compound_message_non_default_values) {
-	std::stringstream ss{ "(test::testMessage2 (test::testMessage 1 12) 3 4)" };
+	std::stringstream ss{ "(testMessage2 (testMessage 1 12) 3 4)" };
 	testMessage2 tm;
 	read(ss, tm);
 	auto expected = testMessage2{ testMessage{ 1, 12 }, 3, 4 };

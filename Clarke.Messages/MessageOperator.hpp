@@ -8,7 +8,7 @@ namespace clarke::messages
 
 	//These are handy bits that go in a header somewhere
 	template<class e, class t, int N>
-	std::basic_istream<e, t>& operator>>(std::basic_istream<e, t>& in, const e(&sliteral)[N]) {
+	constexpr std::basic_istream<e, t>& operator>>(std::basic_istream<e, t>& in, const e(&sliteral)[N]) {
 		e buffer[N - 1] = {}; //get buffer
 		in >> buffer[0]; //skips whitespace
 		if (N > 2)
@@ -18,7 +18,7 @@ namespace clarke::messages
 		return in;
 	}
 	template<class e, class t>
-	std::basic_istream<e, t>& operator>>(std::basic_istream<e, t>& in, const e& cliteral) {
+	constexpr std::basic_istream<e, t>& operator>>(std::basic_istream<e, t>& in, const e& cliteral) {
 		e buffer(0);  //get buffer
 		in >> buffer; //read data
 		if (buffer != cliteral) //if it failed
@@ -27,7 +27,7 @@ namespace clarke::messages
 	}
 	//redirect mutable char arrays to their normal function
 	template<class e, class t, int N>
-	std::basic_istream<e, t>& operator>>(std::basic_istream<e, t>& in, e(&carray)[N]) {
+	constexpr std::basic_istream<e, t>& operator>>(std::basic_istream<e, t>& in, e(&carray)[N]) {
 		return std::operator>>(in, carray);
 	}
 
@@ -44,13 +44,13 @@ namespace clarke::messages
 	concept basic_type = requires(std::ostream & s, T & o) { s << o; }&& requires(std::istream& s, T& o) { s >> o; };
 
 	template<basic_type T>
-	std::ostream& print(std::ostream& s, T const& object)
+	constexpr std::ostream& print(std::ostream& s, T const& object)
 	{
 		return s << object;
 	}
 
 	template<size_t I, typename... T>
-	std::ostream& print(std::ostream& s, std::tuple<T...> const& tuple)
+	constexpr std::ostream& print(std::ostream& s, std::tuple<T...> const& tuple)
 	{
 		if constexpr (I < sizeof...(T))
 		{
@@ -60,19 +60,19 @@ namespace clarke::messages
 	}
 
 	template<typename T>
-	std::ostream& print(std::ostream& s, T const& object) requires named_type<T>&& is_tuple<T>
+	constexpr std::ostream& print(std::ostream& s, T const& object) requires named_type<T>&& is_tuple<T>
 	{
 		return print<0>(s << "(" << type_name_trait<T>::name, object) << ")";
 	}
 	
 	template<basic_type T>
-	std::istream& read(std::istream& s, T& object)
+	constexpr std::istream& read(std::istream& s, T& object)
 	{
 		return s >> object;
 	}
 
 	template<size_t I, typename... T>
-	std::istream& read(std::istream& s, std::tuple<T...>& tuple)
+	constexpr std::istream& read(std::istream& s, std::tuple<T...>& tuple)
 	{
 		if constexpr (I < sizeof...(T))
 		{
@@ -82,7 +82,7 @@ namespace clarke::messages
 	}
 
 	template<typename T>
-	std::istream& read(std::istream& s, T& object) requires named_type<T>&& is_tuple<T>
+	constexpr std::istream& read(std::istream& s, T& object) requires named_type<T>&& is_tuple<T>
 	{
 		return read<0>(s >> (const char[])"(" >> type_name_trait<T>::name, object) >> (const char[])")";
 	}

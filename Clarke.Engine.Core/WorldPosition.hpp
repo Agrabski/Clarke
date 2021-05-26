@@ -11,7 +11,8 @@ namespace clarke::engine::core
 
 		PROPERTY(x, 0);
 		PROPERTY(y, 1);
+		constexpr WorldPosition operator+(WorldPosition const& other) const noexcept;
 	};
 }
 
-REGISTER_NAME(clarke::engine::core::WorldPosition);
+REGISTER_NAME(clarke::engine::core, WorldPosition);

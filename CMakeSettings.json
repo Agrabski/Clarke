@@ -10,7 +10,7 @@
       "cmakeCommandArgs": "",
       "buildCommandArgs": "-v",
       "ctestCommandArgs": "",
-      "intelliSenseMode": "linux-gcc-x64"
+      "intelliSenseMode": "windows-msvc-x64"
     }
   ]
 }
