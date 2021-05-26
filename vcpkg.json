@@ -5,6 +5,6 @@
   "homepage": "https://github.com/Agrabski/Clarke",
   "description": "C++20 game engine",
   "dependencies": [
-    "GTest"
+    "gtest"
   ]
 }
