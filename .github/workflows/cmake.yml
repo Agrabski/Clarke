@@ -21,10 +21,16 @@ jobs:
         include:
           - os: windows-latest
             triplet: x64-windows
+            compiler: gcc
+            gcc: 10
           - os: ubuntu-latest
             triplet: x64-linux
+            compiler: gcc
+            gcc: 10
           - os: macos-latest
             triplet: x64-osx
+            compiler: gcc
+            gcc: 10
     steps:
       - uses: actions/checkout@v1
         with:
