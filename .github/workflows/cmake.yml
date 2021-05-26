@@ -48,6 +48,7 @@ jobs:
           vcpkgDirectory: '${{ github.workspace }}/vcpkg'
           # Ensure the cache key changes any time the content of the response file changes.
           appendedCacheKey: ${{ hashFiles( env.VCPKGRESPONSEFILE ) }}
+          setupOnly: true
 
       - name: Run CMake with Ninja
         uses: lukka/run-cmake@main
