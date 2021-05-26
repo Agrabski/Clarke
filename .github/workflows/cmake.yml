@@ -25,6 +25,8 @@ jobs:
             triplet: x64-linux
           - os: macos-latest
             triplet: x64-osx
+            compiler: gcc
+            gcc: 8
     steps:
       - uses: actions/checkout@v1
         with:
